@@ -37,7 +37,7 @@ gathering_data_from_form.py :
 
 Same approach implemented here, output will be saved on a folder which has the equal name of the input's name.(Here if we give "Test.jpg" to it, our file would be "test")
 
-Predict_test : 
+prediction.py : 
 
 Finally we use weights for classifying inputs!
 

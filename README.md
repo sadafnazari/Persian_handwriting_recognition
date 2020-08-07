@@ -35,7 +35,7 @@ We designed the neural network which classifies digits into 11 classes.(0-9 and 
 
 gathering_data_from_form.py : 
 
-Same approach implemented here, output will be saved on a folder which has the equal name of the input's name.(Here if we give "Test.jpg" to it, our file would be "Test")
+Same approach implemented here, output will be saved on a folder which has the equal name of the input's name.(Here if we give "Test.jpg" to it, our file would be "test")
 
 Predict_test : 
 

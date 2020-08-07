@@ -2,7 +2,7 @@
 
 In this repository, we tried to recognize the Persian handwriting, both letters and digits. Now let's see how it works!
 
-It takes a form like "Test.jpg" as input (There is an empty source as "Form_A5.pdf.jpg"), extracts each character using computer vision methods and classifies them using convolutional nueral network.
+It takes a form like "Test.jpg" as input (There is an empty form in "Form_A5.pdf"), extracts each character using computer vision methods and classifies them using convolutional nueral network.
 
 # Developers
 
@@ -10,7 +10,7 @@ This project has been developed by <a href="https://github.com/sadafnazari97">Sa
 
 # Brife guide
 
-First you should gather a dataset from Persian handwriting(ours has not been published yet). Data set contains lots of forms like "Dataset_sample1.jpg" and "Dataset_sample1.jpg".
+First you should gather a dataset from Persian handwriting(ours has not been published yet). Data set contains lots of forms like "Dataset_sample2.jpg" and "Dataset_sample1.jpg".
 There is an empty sample as "Dataset_Form_A5.pdf".
 
 As the first step, we should extract data from our dataset.

@@ -8,7 +8,7 @@ It takes a form like "Test.jpg" as input (There is an empty form in "Form_A5.pdf
 
 This project has been developed by <a href="https://github.com/sadafnazari97">Sadaf Nazari</a> and <a href="https://github.com/shakib1377">Shakib Karami</a> as the final project of <a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/">Computer Vision Course</a>.
 
-# Brife guide
+# Brief guide
 
 First you should gather a dataset from Persian handwriting(ours has not been published yet). Data set contains lots of forms like "Dataset_sample2.jpg" and "Dataset_sample1.jpg".
 There is an empty sample as "Dataset_Form_A5.pdf".

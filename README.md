@@ -6,7 +6,7 @@ It takes a form like "Test.jpg" as input (There is an empty form in "Form_A5.pdf
 
 # Developers
 
-This project has been developed by <a href="https://github.com/sadafnazari97">Sadaf Nazari</a> and <a href="https://github.com/shakib1377">Shakib Karami</a> as the final project of <a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/">Computer Vision Course</a>.
+This project has been developed by <a href="https://github.com/sadafnazari97">Sadaf Nazari</a> and <a href="https://github.com/shakib1377">Shakib Karami</a> as the final project of <a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/">Foundations of Computer Vision Course</a>.
 
 # Brief guide
 

@@ -21,7 +21,7 @@ Assume that we have a "dataset" folder, which contains our forms.
 Each image's name follows a particular pattern(like "9999999.jpg").
 we read the image, apply perspective transform with detecting the location of arucos.
 Then find edges with Canny edge detector which helps us to reduce the effect of noise.
-Then we apply Harris corner detection. Guess the location of main corners(top lef ones) and find the nearest corner of those points, extract each cell and save them in "extraced_dataset"
+Then we apply Harris corner detection. Guess the location of main corners(top lef ones) and find the nearest corner of those points, extract each cell and save them in "extraced_dataset" (<a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/assets/files/project/Persian-digits-and-letters-extracted.zip">our extracted dataset</a>)
 
 
 train_letters.py :

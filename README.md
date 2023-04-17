@@ -10,7 +10,7 @@ This project has been developed by <a href="https://github.com/sadafnazari97">Sa
 
 # Brief guide
 
-First you should gather a dataset from Persian handwriting(ours has not been published yet). Data set contains lots of forms like "Dataset_sample2.jpg" and "Dataset_sample1.jpg".
+First you should gather a dataset from Persian handwriting(<a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/assets/files/project/Persian-digits-and-letter-raw.zip">our raw dataset</a>). Data set contains lots of forms like "Dataset_sample2.jpg" and "Dataset_sample1.jpg".
 There is an empty sample as "Dataset_Form_A5.pdf".
 
 As the first step, we should extract data from our dataset.

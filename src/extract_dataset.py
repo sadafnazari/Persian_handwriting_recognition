@@ -1,5 +1,4 @@
 import glob
-import math
 import os
 
 import cv2

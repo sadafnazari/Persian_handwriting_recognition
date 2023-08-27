@@ -150,7 +150,7 @@ def cell_extraction(
                 + "/"
                 + directory
                 + "/"
-                + img_path[img_path.find("/" + type + "/") + 3 : -4]
+                + img_path[img_path.find("/" + type + "/") + 3: -4]
                 + "_"
                 + str(col)
                 + ".jpg",

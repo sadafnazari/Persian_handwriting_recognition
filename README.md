@@ -1,43 +1,53 @@
-# Persian handwriting recognition
+# Persian_handwriting_recognition
 
-In this repository, we tried to recognize the Persian handwriting, both letters and digits. Now let's see how it works!
+## Tools used in this project
+* [Poetry](https://towardsdatascience.com/how-to-effortlessly-publish-your-python-package-to-pypi-using-poetry-44b305362f9f): Dependency management - [article](https://mathdatasimplified.com/2023/06/12/poetry-a-better-way-to-manage-python-dependencies/)
+* [hydra](https://hydra.cc/): Manage configuration files - [article](https://mathdatasimplified.com/2023/05/25/stop-hard-coding-in-a-data-science-project-use-configuration-files-instead/)
+* [pre-commit plugins](https://pre-commit.com/): Automate code reviewing formatting
+* [DVC](https://dvc.org/): Data version control - [article](https://mathdatasimplified.com/2023/02/20/introduction-to-dvc-data-version-control-tool-for-machine-learning-projects-2/)
+* [pdoc](https://github.com/pdoc3/pdoc): Automatically create an API documentation for your project
 
-It takes a form like "Test.jpg" as input (There is an empty form in "Form_A5.pdf"), extracts each character using computer vision methods and classifies them using convolutional nueral network.
+## Set up the environment
+1. Install [Poetry](https://python-poetry.org/docs/#installation)
+2. Set up the environment:
+```bash
+make env 
+```
 
-# Developers
+## Install dependencies
+To install all dependencies for this project, run:
+```bash
+poetry install
+```
 
-This project has been developed by <a href="https://github.com/sadafnazari97">Sadaf Nazari</a> and <a href="https://github.com/shakib1377">Shakib Karami</a> as the final project of <a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/">Foundations of Computer Vision Course</a>.
+To install a new package, run:
+```bash
+poetry add <package-name>
+```
 
-# Brief guide
+## Version your data
+To track changes to the "data" directory, type:
+```bash
+dvc add data
+```
 
-First you should gather a dataset from Persian handwriting(<a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/assets/files/project/Persian-digits-and-letter-raw.zip">our raw dataset</a>). Data set contains lots of forms like "Dataset_sample2.jpg" and "Dataset_sample1.jpg".
-There is an empty sample as "Dataset_Form_A5.pdf".
+This command will create the "data.dvc" file, which contains a unique identifier and the location of the data directory in the file system.
 
-As the first step, we should extract data from our dataset.
+To keep track of the data associated with a particular version, commit the "data.dvc" file to Git:
+```bash
+git add data.dvc
+git commit -m "add data"
+```
 
-gathering_data_from_dataset.py :
+To push the data to remote storage, type:
+```bash
+dvc push 
+```
 
-Assume that we have a "dataset" folder, which contains our forms. 
-Each image's name follows a particular pattern(like "9999999.jpg").
-we read the image, apply perspective transform with detecting the location of arucos.
-Then find edges with Canny edge detector which helps us to reduce the effect of noise.
-Then we apply Harris corner detection. Guess the location of main corners(top lef ones) and find the nearest corner of those points, extract each cell and save them in "extraced_dataset" (<a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/assets/files/project/Persian-digits-and-letters-extracted.zip">our extracted dataset</a>)
+## Auto-generate API documentation
 
+To auto-generate API document for your project, run:
 
-train_letters.py :
-
-We designed the neural network which classifies letters into 33 classes.(alef-y and blank) and extract "letters.h5" from that.
-
-train_digits.py : 
-
-We designed the neural network which classifies digits into 11 classes.(0-9 and blank) and extract "numbers.h5" from that.
-
-
-gathering_data_from_form.py : 
-
-Same approach implemented here, output will be saved on a folder which has the equal name of the input's name.(Here if we give "Test.jpg" to it, our file would be "test")
-
-prediction.py : 
-
-Finally we use weights for classifying inputs!
-
+```bash
+make docs
+```

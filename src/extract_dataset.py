@@ -1,8 +1,9 @@
-import cv2
-import numpy as np
 import glob
 import math
 import os
+
+import cv2
+import numpy as np
 
 
 def aruco_extraction(img):
@@ -21,7 +22,9 @@ def aruco_extraction(img):
     parameters = cv2.aruco.DetectorParameters_create()
 
     # Detect the markers in the image
-    marker_corners, marker_ids, rejected_candidates = cv2.aruco.detectMarkers(img, dictionary, parameters=parameters)
+    marker_corners, marker_ids, rejected_candidates = cv2.aruco.detectMarkers(
+        img, dictionary, parameters=parameters
+    )
 
     # Checks how many markers are detected
     if len(marker_corners) != 4:
@@ -40,10 +43,15 @@ def aruco_extraction(img):
     #                                   top right point of the top right marker,
     #                                   bottom right point of the bottom right marker,
     #                                   bottom left point of the bottom left marker)
-    boundaries = np.array([sorted_corners[0][0],
-                           sorted_corners[1][1],
-                           sorted_corners[3][2],
-                           sorted_corners[2][3]], dtype=np.float32)
+    boundaries = np.array(
+        [
+            sorted_corners[0][0],
+            sorted_corners[1][1],
+            sorted_corners[3][2],
+            sorted_corners[2][3],
+        ],
+        dtype=np.float32,
+    )
     return boundaries
 
 
@@ -60,18 +68,28 @@ def form_extraction(img, corners, form_width, form_height):
     Returns:
         numpy.ndarray: image of the extracted form
     """
-    form_points = np.array([(0, 0),
-                        (form_width, 0),
-                        (form_width, form_height),
-                        (0, form_height)]).astype(np.float32)
+    form_points = np.array(
+        [(0, 0), (form_width, 0), (form_width, form_height), (0, form_height)]
+    ).astype(np.float32)
 
     # applies perspective tranformation
     perspective_transformation = cv2.getPerspectiveTransform(corners, form_points)
-    form = cv2.warpPerspective(img, perspective_transformation, (form_width, form_height))
+    form = cv2.warpPerspective(
+        img, perspective_transformation, (form_width, form_height)
+    )
     return form
 
 
-def cell_extraction(img, img_path, extracted_dataset_path, type, form_width, form_height, cell_width, cell_height):
+def cell_extraction(
+    img,
+    img_path,
+    extracted_dataset_path,
+    type,
+    form_width,
+    form_height,
+    cell_width,
+    cell_height,
+):
     """
     Extracts cells and the saves them based on the type of the given form
 
@@ -91,23 +109,22 @@ def cell_extraction(img, img_path, extracted_dataset_path, type, form_width, for
     cell_width = form_width // num_vertical_lines
     cell_height = form_height // num_horizontal_lines
 
-
     for row in range(num_horizontal_lines):
-        if type == 'a': # the directory is named for the form 'a'
-            if row < 2: # cells for number '0' and '1'
+        if type == "a":  # the directory is named for the form 'a'
+            if row < 2:  # cells for number '0' and '1'
                 directory = str(row)
-            elif row > 18: # cells for number '2' and '3'
-                directory = str(row-17)
+            elif row > 18:  # cells for number '2' and '3'
+                directory = str(row - 17)
             else:
-                directory = str(row+8) # cells for the first part of the letters
+                directory = str(row + 8)  # cells for the first part of the letters
 
-        elif type == 'b': # the directory is named for the form 'b'
-            if row < 2: # cells for number '3' and '4'
-                directory = str(row+4)
-            elif row > 16: # cells for number '6', '7', '8', and '9'
-                directory = str(row-11)
-            else: # cells for the second part of the letters
-                directory = str(row+25)
+        elif type == "b":  # the directory is named for the form 'b'
+            if row < 2:  # cells for number '3' and '4'
+                directory = str(row + 4)
+            elif row > 16:  # cells for number '6', '7', '8', and '9'
+                directory = str(row - 11)
+            else:  # cells for the second part of the letters
+                directory = str(row + 25)
 
         for col in range(num_vertical_lines):
             # calculates the position of the cells
@@ -128,7 +145,17 @@ def cell_extraction(img, img_path, extracted_dataset_path, type, form_width, for
             if row > 18 and col > 11:
                 continue
 
-            cv2.imwrite(extracted_dataset_path + "/" + directory + "/" + img_path[img_path.find('/'+type+'/')+3:-4] + "_" + str(col) + ".jpg", cell)
+            cv2.imwrite(
+                extracted_dataset_path
+                + "/"
+                + directory
+                + "/"
+                + img_path[img_path.find("/" + type + "/") + 3 : -4]
+                + "_"
+                + str(col)
+                + ".jpg",
+                cell,
+            )
 
 
 def make_directories(extracted_dataset_path):
@@ -151,9 +178,8 @@ def make_directories(extracted_dataset_path):
 
     # Creating the subdirectories within the main directory
     for i in range(42):
-        if not os.path.exists(extracted_dataset_path + '/' + str(i)):
-            os.makedirs(extracted_dataset_path + '/' + str(i))
-
+        if not os.path.exists(extracted_dataset_path + "/" + str(i)):
+            os.makedirs(extracted_dataset_path + "/" + str(i))
 
 
 def main():
@@ -165,35 +191,53 @@ def main():
     cell_height = 60
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(script_dir, '..', 'data')
-    dataset_path = os.path.join(data_dir, 'processed')
+    data_dir = os.path.join(script_dir, "..", "data")
+    dataset_path = os.path.join(data_dir, "processed")
 
-    extracted_dataset_path = os.path.join(data_dir, 'final')
+    extracted_dataset_path = os.path.join(data_dir, "final")
 
     make_directories(extracted_dataset_path)
 
     # Extracting the forms of the type 'a'
-    for image_path in glob.glob(dataset_path + '/a' + '/*.*'):
+    for image_path in glob.glob(dataset_path + "/a" + "/*.*"):
         image = cv2.imread(image_path)
         corners = aruco_extraction(image)
         if corners is None:
             print(f"The image {image_path[image_path.find('/a/')+3:]} is dropped.")
             continue
         form = form_extraction(image, corners, form_width, form_height)
-        cell_extraction(form, image_path, extracted_dataset_path, 'a', form_width, form_height, cell_width, cell_height)
+        cell_extraction(
+            form,
+            image_path,
+            extracted_dataset_path,
+            "a",
+            form_width,
+            form_height,
+            cell_width,
+            cell_height,
+        )
 
     # Extracting the forms of the type 'b'
-    for image_path in glob.glob(dataset_path + '/b' + '/*.*'):
+    for image_path in glob.glob(dataset_path + "/b" + "/*.*"):
         image = cv2.imread(image_path)
         corners = aruco_extraction(image)
         if corners is None:
             print(f"The image {image_path[image_path.find('/b/')+3:]} is dropped.")
             continue
         form = form_extraction(image, corners, form_width, form_height)
-        cell_extraction(form, image_path, extracted_dataset_path, 'b', form_width, form_height, cell_width, cell_height)
+        cell_extraction(
+            form,
+            image_path,
+            extracted_dataset_path,
+            "b",
+            form_width,
+            form_height,
+            cell_width,
+            cell_height,
+        )
 
     print("dataset is extracted successfully.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

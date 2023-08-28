@@ -22,11 +22,11 @@ The objective of the data preprocessing is to extract each cell from each form, 
 
 This can be done with the following steps:
 1. Since in the original dataset, the images are stored numrically altogether, it is not easy to store the extracted cells into the correct subfolder that would represent the label/class of that cell with only computer vision tools. Therefore, the manual separation of the forms based on their type (a or b) is needed. The separated dataset can be found `data/processed_dataset.zip`. It should be unzip and stored in `/data/processed` directory.
-2. Next the script for extracting the final dataset should be run with the following command `python3 src/extract_dataset.py`:
+2. Next the script for extracting the final dataset should be run with the following command `python3 src/01_extract_dataset.py`:
    1. Make the neccessary directories in the `data/final` directory. These directories will later represent the class of each data.
    2. Reads image
    3. Detects the Aruco markers, and drops the ones that their markers cannot be detected
    4. Applies perspective transformation on the image so that the orientation of the form will be fixed for all images
    5. Resize the images to a determined size in order to have the same size for all the images
    6. Extracts each cell, resizes them to a determined size, and store them to their correspondent folder in the `data/final` directory(labeling process)
-   7. (Note): The final data can be found in `data/final_dataset.zip` in case one would like to skip executing th `extract_dataset.py` script.
+   7. (Note): The final data can be found in `data/final_dataset.zip` in case one would like to skip executing th `01_extract_dataset.py` script.

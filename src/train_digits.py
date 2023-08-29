@@ -8,23 +8,43 @@ import os
 import numpy as np
 import shutil
 
-root_dir = ''
-classes_dir = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '42']
+root_dir = '/home/sadaf/Documents/personal/repositories/Persian_handwriting_recognition/data/final'
+classes_dir = []
+for i in range(42):
+    classes_dir.append(str(i))
 
 val_ratio = 0.20
 test_ratio = 0.05
 
-for cls in classes_dir:
-    try:
-        os.makedirs('/Train/' + cls)
-        os.makedirs('/Validation/' + cls)
-        os.makedirs('/Test/' + cls)
-    except:
-        print("Directories already exist")
+os.makedirs('Train/')
+os.makedirs('Validation/')
+os.makedirs('Test/')
 
+for cls in classes_dir:
+    os.makedirs('Train/' + cls)
+    os.makedirs('Validation/' + cls)
+    os.makedirs('Test/' + cls)
+
+
+# if not os.path.exists('Train'):
+#     os.makedirs('Train')
+
+# if not os.path.exists('Validation'):
+#     os.makedirs('Validation')
+
+# if not os.path.exists('Test'):
+#     os.makedirs('Test')
+# # Creating the subdirectories within the main directory
+# for i in range(42):
+#     if not os.path.exists('Train' + "/" + str(i)):
+#         os.makedirs('Train' + "/" + str(i))
+#     if not os.path.exists('Validation' + "/" + str(i)):
+#         os.makedirs('Validation' + "/" + str(i))
+#     if not os.path.exists('Test' + "/" + str(i)):
+#         os.makedirs('Test' + "/" + str(i))
 
     # Creating partitions of the data after shuffeling
-    src = root_dir + cls  # Folder to copy images from
+    src = root_dir + '/' +cls  # Folder to copy images from
 
     allFileNames = os.listdir(src)
     np.random.shuffle(allFileNames)
@@ -46,17 +66,17 @@ for cls in classes_dir:
 
     # Copy-pasting images
     for name in train_FileNames:
-        shutil.copy(name, '/Train/' + cls)
+        shutil.copy(name, 'Train/' + cls)
 
     for name in val_FileNames:
-        shutil.copy(name, '/Validation/' + cls)
+        shutil.copy(name, 'Validation/' + cls)
 
     for name in test_FileNames:
-        shutil.copy(name, '/Test/' + cls)
+        shutil.copy(name, 'Test/' + cls)
 
 
 # create model
-num_classes = 11
+num_classes = 42
 model = Sequential()
 model.add(Conv2D(filters=16, kernel_size=(5, 5), strides=(1, 1), activation='relu', input_shape=(40, 40, 3)))
 model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
@@ -115,9 +135,3 @@ history = model.fit(
       epochs=50,
       verbose=1,
       callbacks=checkpoint_loss)
-
-
-
-
-
-

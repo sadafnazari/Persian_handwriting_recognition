@@ -191,9 +191,9 @@ def main():
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(script_dir, "..", "data")
-    dataset_path = os.path.join(data_dir, "processed")
+    dataset_path = os.path.join(data_dir, "02_splitted")
 
-    extracted_dataset_path = os.path.join(data_dir, "final")
+    extracted_dataset_path = os.path.join(data_dir, "03_labeled")
 
     make_directories(extracted_dataset_path)
 

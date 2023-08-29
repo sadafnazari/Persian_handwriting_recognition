@@ -76,11 +76,12 @@ target/
 .ipynb_checkpoints/
 
 # exclude data from source control by default
-/data/raw
-/data/processed
-/data/final
+/data/01_raw
+/data/02_splitted
+/data/03_labeled
+/data/04_final
 
-# Mac OS-specific storage files
+# Mac OS-specific storsage files
 .DS_Store
 
 # vim

@@ -1,5 +1,6 @@
 import glob
 import os
+import shutil
 
 import cv2
 import numpy as np
@@ -149,7 +150,7 @@ def cell_extraction(
                 + "/"
                 + directory
                 + "/"
-                + img_path[img_path.find("/" + type + "/") + 3: -4]
+                + img_path[img_path.find("/" + type + "/") + 3 : -4]
                 + "_"
                 + str(col)
                 + ".jpg",
@@ -157,28 +158,126 @@ def cell_extraction(
             )
 
 
-def make_directories(extracted_dataset_path):
+def make_directories(path, num_classes):
     """
-    Creates the main directory for storing the result
-    of data extraction and the needed subdirectories.
-    0-9 are correspondent to numbers and 10-41 are
-    correspondent to the persian letters.
+    Creates directory  and the needed subdirectories. 0-9 are correspondent to numbers and 10-41 are correspondent to the persian letters.
 
     Args:
-        extracted_dataset_path (str): The name of the main directory for
-        storing the extracted dataset
+        path (str): The name of the main directory for creating the directories
+        num_classes (int): indicates the number of claases
     """
     # Creating the main directory
-    if not os.path.exists(extracted_dataset_path):
-        os.makedirs(extracted_dataset_path)
-        print(f"Folder '{extracted_dataset_path}' created.")
+    if not os.path.exists(path):
+        os.makedirs(path)
+        print(f"Folder '{path}' created.")
     else:
-        print(f"Folder '{extracted_dataset_path}' already exists.")
+        print(f"Folder '{path}' already exists.")
 
     # Creating the subdirectories within the main directory
-    for i in range(42):
-        if not os.path.exists(extracted_dataset_path + "/" + str(i)):
-            os.makedirs(extracted_dataset_path + "/" + str(i))
+    for i in range(num_classes):
+        if not os.path.exists(path + "/" + str(i)):
+            os.makedirs(path + "/" + str(i))
+
+
+def label_dataset(
+    dataset_path,
+    labeled_dataset_path,
+    type,
+    form_width,
+    form_height,
+    cell_width,
+    cell_height,
+):
+    """labels dataset by extracting form and each cell and saving them to a folder that represents the class of each cell
+
+    Args:
+        dataset_path (str): path of the dataset
+        labeled_dataset_path (str): path for storing the labeled dataset
+        type (str): type of the form, either 'a' or 'b'
+        form_width (int): width of the form
+        form_height (int): height of the form
+        cell_width (int): width of each cell
+        cell_height (int): height of each cell
+    """
+
+    for image_path in glob.glob(dataset_path + "/" + type + "/*.*"):
+        image = cv2.imread(image_path)
+        corners = aruco_extraction(image)
+        if corners is None:
+            print(
+                f"The image {image_path[image_path.find('/' + type + '/')+3:]} is dropped."
+            )
+            continue
+        form = form_extraction(image, corners, form_width, form_height)
+        cell_extraction(
+            form,
+            image_path,
+            labeled_dataset_path,
+            type,
+            form_width,
+            form_height,
+            cell_width,
+            cell_height,
+        )
+
+
+def finalise_dataset(
+    labeled_dataset_path, final_dataset_path, num_classes, val_ratio, test_ratio
+):
+    """
+    Splits dataset into train, val, and test set based on the given ratio
+    Args:
+        labeled_dataset_path (str): path of the labeled dataset
+        final_dataset_path (str): path for finalised dataset
+        num_classes (int): number of classes
+        val_ratio (float): ratio for validation set
+        test_ratio (float): ratio for test set
+    """
+    make_directories(final_dataset_path + "/train", num_classes)
+    make_directories(final_dataset_path + "/val", num_classes)
+    make_directories(final_dataset_path + "/test", num_classes)
+
+    for cls in range(num_classes):
+        all_file_names = os.listdir(labeled_dataset_path + "/" + str(cls))
+
+        np.random.shuffle(all_file_names)
+        train_file_names, val_file_names, test_file_names = np.split(
+            np.array(all_file_names),
+            [
+                int(len(all_file_names) * (1 - val_ratio + test_ratio)),
+                int(len(all_file_names) * (1 - test_ratio)),
+            ],
+        )
+
+        train_file_names = [
+            labeled_dataset_path + "/" + str(cls) + "/" + name
+            for name in train_file_names.tolist()
+        ]
+        val_file_names = [
+            labeled_dataset_path + "/" + str(cls) + "/" + name
+            for name in val_file_names.tolist()
+        ]
+        test_file_names = [
+            labeled_dataset_path + "/" + str(cls) + "/" + name
+            for name in test_file_names.tolist()
+        ]
+
+        print("________________________")
+        print("Class : ", cls)
+        print("Total images: ", len(all_file_names))
+        print("Training: ", len(train_file_names))
+        print("Validation: ", len(val_file_names))
+        print("Testing: ", len(test_file_names))
+
+        # Copy-pasting images
+        for name in train_file_names:
+            shutil.copy(name, final_dataset_path + "/train/" + str(cls))
+
+        for name in val_file_names:
+            shutil.copy(name, final_dataset_path + "/val/" + str(cls))
+
+        for name in test_file_names:
+            shutil.copy(name, final_dataset_path + "/test/" + str(cls))
 
 
 def main():
@@ -189,53 +288,49 @@ def main():
     cell_width = 60
     cell_height = 60
 
+    num_classes = 42
+
+    val_ratio = 0.20
+    test_ratio = 0.05
+
     script_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(script_dir, "..", "data")
     dataset_path = os.path.join(data_dir, "02_splitted")
 
-    extracted_dataset_path = os.path.join(data_dir, "03_labeled")
+    labeled_dataset_path = os.path.join(data_dir, "03_labeled")
+    final_dataset_path = os.path.join(data_dir, "04_final")
 
-    make_directories(extracted_dataset_path)
+    make_directories(labeled_dataset_path, num_classes)
 
     # Extracting the forms of the type 'a'
-    for image_path in glob.glob(dataset_path + "/a" + "/*.*"):
-        image = cv2.imread(image_path)
-        corners = aruco_extraction(image)
-        if corners is None:
-            print(f"The image {image_path[image_path.find('/a/')+3:]} is dropped.")
-            continue
-        form = form_extraction(image, corners, form_width, form_height)
-        cell_extraction(
-            form,
-            image_path,
-            extracted_dataset_path,
-            "a",
-            form_width,
-            form_height,
-            cell_width,
-            cell_height,
-        )
+    label_dataset(
+        dataset_path,
+        labeled_dataset_path,
+        "a",
+        form_width,
+        form_height,
+        cell_width,
+        cell_height,
+    )
 
     # Extracting the forms of the type 'b'
-    for image_path in glob.glob(dataset_path + "/b" + "/*.*"):
-        image = cv2.imread(image_path)
-        corners = aruco_extraction(image)
-        if corners is None:
-            print(f"The image {image_path[image_path.find('/b/')+3:]} is dropped.")
-            continue
-        form = form_extraction(image, corners, form_width, form_height)
-        cell_extraction(
-            form,
-            image_path,
-            extracted_dataset_path,
-            "b",
-            form_width,
-            form_height,
-            cell_width,
-            cell_height,
-        )
+    label_dataset(
+        dataset_path,
+        labeled_dataset_path,
+        "b",
+        form_width,
+        form_height,
+        cell_width,
+        cell_height,
+    )
 
-    print("dataset is extracted successfully.")
+    print("dataset is extracted and labeled successfully.")
+
+    finalise_dataset(
+        labeled_dataset_path, final_dataset_path, num_classes, val_ratio, test_ratio
+    )
+
+    print("dataset is split to train, val, and test successfully.")
 
 
 if __name__ == "__main__":

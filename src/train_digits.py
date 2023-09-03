@@ -8,7 +8,7 @@ import os
 import numpy as np
 import shutil
 
-root_dir = '/home/sadaf/Documents/personal/repositories/Persian_handwriting_recognition/data/final'
+root_dir = '/home/sadaf/Documents/personal/repositories/Persian_handwriting_recognition/data/03_labeled'
 classes_dir = []
 for i in range(42):
     classes_dir.append(str(i))
@@ -47,6 +47,7 @@ for cls in classes_dir:
     src = root_dir + '/' +cls  # Folder to copy images from
 
     allFileNames = os.listdir(src)
+
     np.random.shuffle(allFileNames)
     train_FileNames, val_FileNames, test_FileNames = np.split(np.array(allFileNames),
                                                               [int(len(allFileNames) * (1 - val_ratio + test_ratio)),

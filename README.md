@@ -18,15 +18,29 @@ In case of a need to collect a new dataset, or add more data to the current data
 7. (pre_labeling step): Each form will be separated manually in `data/02_splitted/a` or `data/02_splitted/b` based on their type. 
    
 # Data preprocessing
-The objective of the data labeling is to extract each cell from each form, and store each cell in a folder that represents the class of that cell (0 to 9 for the numbers and 10 to 42 for the letters). 
+The objective of the data preprocessing is to first, extract each cell from each form, and store each cell in a folder that represents the class of that cell (0 to 9 for the numbers and 10 to 42 for the letters). This is the labeling process. Also, shuffling the labeled dataset and split it to train, val, and test set is done afterwards.
 
 Since in the original dataset, the images are stored numrically altogether, it is not easy to store the extracted cells into the correct subfolder that would represent the label/class of that cell with only computer vision tools. Therefore, the manual separation of the forms based on their type (a or b) is needed. The separated dataset can be found `data/02_splitted.zip`. It should be unzip and data should be stored in `/data/02_splitted` directory.
 
-The labeling process can be done by the `src/data_preprocessing.py` script which operate as follows (The labeled data can be found in `data/03_labeled.zip` in case one would like to skip executing th `src/data_preprocessing.py` script.):
+The labeling process can be done by the `src/data_preprocessing.py` script which operate as follows (The labeled data can be found in `data/03_labeled.zip` in case one would like to skip executing the `src/data_preprocessing.py` script.):
 1. Makes the neccessary directories in the `data/03_labeled` directory. These directories will later represent the class of each data.
 2. Reads image
 3. Detects the Aruco markers, and drops the ones that their markers cannot be detected
 4. Applies perspective transformation on the image so that the orientation of the form will be fixed for all images
 5. Resize the images to a determined size in order to have the same size for all the images
 6. Extracts each cell, resizes them to a determined size, and store them to their correspondent folder in the `data/03_labeled` directory(labeling process)
-7. shuffle the dataset into train, val, and test set and store them in the `data/04_final` directory.
+
+The last step would be to shuffle the dataset and create the train, val, and test set based on the ratio. The output can be found in `data/04_final.zip`.
+
+For running the preprocessing follow these steps:
+1. Put the splitted dataset into the proper directory (default is the data folder)
+2. Add the relative path of the splitted, labeled, and final into the config file, which is in `config/data_preprocess.yaml`.
+3. If the config file is different than `config/data_process.py` adjust it in the `src/data_preprocess.py` script:
+```python
+@hydra.main(version_base=None, config_path="../config", config_name="data_preprocess.yaml")
+```
+4. Execute the script in the project directory:
+```bash
+cd Persian_handwriting_recognition/
+python3 src/data_preprocessing.py
+```

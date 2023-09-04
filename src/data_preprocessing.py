@@ -280,25 +280,67 @@ def finalise_dataset(
             shutil.copy(name, final_dataset_path + "/test/" + str(cls))
 
 
-def main():
+def check_config(cfg, required_keys):
+    """
+    Checks the config file and raise a value if there is a problem
+    Args:
+        cfg (omegaconf.dictconfig.DictConfig): A config file that is shared through 'hydra'
+        required_keys (list): A list of required keys to be checked
 
-    form_width = 800
-    form_height = 1130
+    Raises:
+        ValueError: if a key is missing
+        ValueError: if a key is none
+    """
+    for key in required_keys:
+        value = cfg
+        for subkey in key.split("."):
+            if subkey not in value:
+                raise ValueError(f"Key '{key}' is missing in the configuration.")
+            value = value[subkey]
 
-    cell_width = 60
-    cell_height = 60
+        if value is None:
+            raise ValueError(f"Value for key '{key}' is None in the configuration.")
 
-    num_classes = 42
 
-    val_ratio = 0.20
-    test_ratio = 0.05
+@hydra.main(
+    version_base=None, config_path="../config", config_name="data_preprocess.yaml"
+)
+def preproessing(config):
+    """preprocess data
 
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(script_dir, "..", "data")
-    dataset_path = os.path.join(data_dir, "02_splitted")
+    Args:
+        config (omegaconf.dictconfig.DictConfig): the config file
+    """
+    required_keys = [
+        "dataset.splitted",
+        "dataset.labeled",
+        "dataset.final",
+        "variables.form_width",
+        "variables.form_height",
+        "variables.cell_width",
+        "variables.cell_height",
+        "variables.num_classes",
+        "variables.val_ratio",
+        "variables.test_ratio",
+    ]
 
-    labeled_dataset_path = os.path.join(data_dir, "03_labeled")
-    final_dataset_path = os.path.join(data_dir, "04_final")
+    check_config(config, required_keys)
+
+    form_width = config.variables.form_width
+    form_height = config.variables.form_height
+
+    cell_width = config.variables.cell_width
+    cell_height = config.variables.cell_height
+
+    num_classes = config.variables.num_classes
+
+    val_ratio = config.variables.val_ratio
+    test_ratio = config.variables.test_ratio
+
+    dataset_path = config.dataset.splitted
+
+    labeled_dataset_path = config.dataset.labeled
+    final_dataset_path = config.dataset.final
 
     make_directories(labeled_dataset_path, num_classes)
 
@@ -334,4 +376,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    preproessing()

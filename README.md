@@ -35,7 +35,7 @@ The last step would be to shuffle the dataset and create the train, val, and tes
 For running the preprocessing follow these steps:
 1. Put the splitted dataset into the proper directory (default is the data folder)
 2. Add the relative path of the splitted, labeled, and final into the config file, which is in `config/data_preprocess.yaml`.
-3. If the config file is different than `config/data_process.py` pass its path in the `src/data_preprocess.py` script:
+3. If the config file is different than `config/data_process.py` pass its path in the `src/data_preprocess.py` script.
 4. Execute the script in the project directory:
 ```bash
 cd Persian_handwriting_recognition/

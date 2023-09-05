@@ -4,6 +4,7 @@ import shutil
 
 import cv2
 import numpy as np
+import yaml
 
 
 def aruco_extraction(img):
@@ -302,14 +303,11 @@ def check_config(cfg, required_keys):
             raise ValueError(f"Value for key '{key}' is None in the configuration.")
 
 
-@hydra.main(
-    version_base=None, config_path="../config", config_name="data_preprocess.yaml"
-)
 def preproessing(config):
     """preprocess data
 
     Args:
-        config (omegaconf.dictconfig.DictConfig): the config file
+        config (dict): the config file
     """
     required_keys = [
         "dataset.splitted",
@@ -326,21 +324,21 @@ def preproessing(config):
 
     check_config(config, required_keys)
 
-    form_width = config.variables.form_width
-    form_height = config.variables.form_height
+    form_width = config["variables"].get("form_width")
+    form_height = config["variables"].get("form_height")
 
-    cell_width = config.variables.cell_width
-    cell_height = config.variables.cell_height
+    cell_width = config["variables"].get("cell_width")
+    cell_height = config["variables"].get("cell_height")
 
-    num_classes = config.variables.num_classes
+    num_classes = config["variables"].get("num_classes")
 
-    val_ratio = config.variables.val_ratio
-    test_ratio = config.variables.test_ratio
+    val_ratio = config["variables"].get("val_ratio")
+    test_ratio = config["variables"].get("test_ratio")
 
-    dataset_path = config.dataset.splitted
+    dataset_path = config["dataset"].get("splitted")
 
-    labeled_dataset_path = config.dataset.labeled
-    final_dataset_path = config.dataset.final
+    labeled_dataset_path = config["dataset"].get("labeled")
+    final_dataset_path = config["dataset"].get("final")
 
     make_directories(labeled_dataset_path, num_classes)
 
@@ -367,7 +365,7 @@ def preproessing(config):
     )
 
     print("dataset is extracted and labeled successfully.")
-
+    return
     finalise_dataset(
         labeled_dataset_path, final_dataset_path, num_classes, val_ratio, test_ratio
     )
@@ -376,4 +374,20 @@ def preproessing(config):
 
 
 if __name__ == "__main__":
-    preproessing()
+    try:
+        with open("config/data_preprocess.yaml", "r") as config_file:
+            config = yaml.safe_load(config_file)
+        if config is None:
+            raise ValueError("The YAML file is empty or invalid.")
+    except FileNotFoundError:
+        print("The configuration file 'config.yaml' was not found.")
+    except yaml.YAMLError as e:
+        print("Error parsing the YAML configuration file:")
+        print(e)
+    except ValueError as e:
+        print("Error loading the configuration data:")
+        print(e)
+    else:
+        # Configuration loaded successfully, you can access settings here
+        print("Configuration loaded successfully.")
+        preproessing(config)

@@ -281,7 +281,7 @@ def finalise_dataset(
             shutil.copy(name, final_dataset_path + "/test/" + str(cls))
 
 
-def check_config(cfg, required_keys):
+def check_config_keys(cfg, required_keys):
     """
     Checks the config file and raise a value if there is a problem
     Args:
@@ -301,6 +301,38 @@ def check_config(cfg, required_keys):
 
         if value is None:
             raise ValueError(f"Value for key '{key}' is None in the configuration.")
+
+
+def check_config_file(config_path):
+    """
+    checks if the config file exists and can be properly loaded
+    Args:
+        config_path (str): the path of the config file
+
+    Raises:
+        ValueError: if the config file is empty or invalid
+        FileNotFoundError: if the config file was not found
+        FileNotFoundError: if there was a problem in parsing data
+        ValueError: if there was a problem in loading data
+
+    Returns:
+        dict: a dictionary containing the config file
+    """
+    try:
+        with open(config_path, "r") as config_file:
+            config = yaml.safe_load(config_file)
+        if config is None:
+            raise ValueError("The YAML file is empty or invalid.")
+    except FileNotFoundError:
+        raise FileNotFoundError(f"The configuration file 'config.yaml' was not found.")
+    except yaml.YAMLError as e:
+        raise FileNotFoundError(f"Error parsing the YAML configuration file:")
+    except ValueError as e:
+        raise ValueError(f"Error loading the configuration data:")
+    else:
+        # Configuration loaded successfully, you can access settings here
+        print("Configuration loaded successfully.")
+    return config
 
 
 def preproessing(config):
@@ -365,7 +397,7 @@ def preproessing(config):
     )
 
     print("dataset is extracted and labeled successfully.")
-    return
+
     finalise_dataset(
         labeled_dataset_path, final_dataset_path, num_classes, val_ratio, test_ratio
     )
@@ -374,20 +406,6 @@ def preproessing(config):
 
 
 if __name__ == "__main__":
-    try:
-        with open("config/data_preprocess.yaml", "r") as config_file:
-            config = yaml.safe_load(config_file)
-        if config is None:
-            raise ValueError("The YAML file is empty or invalid.")
-    except FileNotFoundError:
-        print("The configuration file 'config.yaml' was not found.")
-    except yaml.YAMLError as e:
-        print("Error parsing the YAML configuration file:")
-        print(e)
-    except ValueError as e:
-        print("Error loading the configuration data:")
-        print(e)
-    else:
-        # Configuration loaded successfully, you can access settings here
-        print("Configuration loaded successfully.")
-        preproessing(config)
+    config_path = "config/data_preprocess.yaml"
+    config = check_config_file(config_path)
+    preproessing(config)

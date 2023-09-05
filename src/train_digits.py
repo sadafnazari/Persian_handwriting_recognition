@@ -6,24 +6,31 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint
 import os
 import numpy as np
+import yaml
 
-# create model
-num_classes = 42
-model = Sequential()
-model.add(Conv2D(filters=16, kernel_size=(5, 5), strides=(1, 1), activation='relu', input_shape=(40, 40, 3)))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-model.add(Conv2D(filters=32, kernel_size=(5, 5), strides=(1, 1), activation='relu', input_shape=(40, 40, 3)))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-model.add(Flatten())
-model.add(Dense(40, activation='relu'))
-model.add(Dense(60, activation='relu'))
-model.add(Dense(60, activation='relu'))
-model.add(Dense(40, activation='relu'))
-model.add(Dense(num_classes, activation='softmax'))
-# compile model
-model.compile(optimizer='adam', loss='categorical_crossentropy',  metrics=['accuracy'])
-model.summary()
+def train_process(config):
 
+def build_model(num_classes):
+    model = Sequential()
+    model.add(Conv2D(filters=16, kernel_size=(5, 5), strides=(1, 1), activation='relu', input_shape=(40, 40, 3)))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+    model.add(Conv2D(filters=32, kernel_size=(5, 5), strides=(1, 1), activation='relu', input_shape=(40, 40, 3)))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+    model.add(Flatten())
+    model.add(Dense(40, activation='relu'))
+    model.add(Dense(60, activation='relu'))
+    model.add(Dense(60, activation='relu'))
+    model.add(Dense(40, activation='relu'))
+    model.add(Dense(num_classes, activation='softmax'))
+
+    return model
+
+def compile_model(model, optimizer, loss_type, metrics):
+    # compile model
+    model.compile(optimizer='adam', loss='categorical_crossentropy',  metrics=['accuracy'])
+    return model.summary()
+
+def data_generator(rescale, shear_range, zoom_range, width_shift_range, height_shift_range, train_batch, val_batch)
 # Data labeling and augmentation
 datagen = ImageDataGenerator(
         rescale=1./255,
@@ -67,3 +74,23 @@ history = model.fit(
       epochs=50,
       verbose=1,
       callbacks=checkpoint_loss)
+
+
+if __name__ == "__main__":
+    try:
+        with open("config/model.yaml", "r") as config_file:
+            config = yaml.safe_load(config_file)
+        if config is None:
+            raise ValueError("The YAML file is empty or invalid.")
+    except FileNotFoundError:
+        print("The configuration file 'config.yaml' was not found.")
+    except yaml.YAMLError as e:
+        print("Error parsing the YAML configuration file:")
+        print(e)
+    except ValueError as e:
+        print("Error loading the configuration data:")
+        print(e)
+    else:
+        # Configuration loaded successfully, you can access settings here
+        print("Configuration loaded successfully.")
+        train_process(config)

@@ -345,27 +345,27 @@ def preproessing(config):
         "dataset.splitted",
         "dataset.labeled",
         "dataset.final",
-        "variables.form_width",
-        "variables.form_height",
-        "variables.cell_width",
-        "variables.cell_height",
-        "variables.num_classes",
-        "variables.val_ratio",
-        "variables.test_ratio",
+        "pre_processing.form_width",
+        "pre_processing.form_height",
+        "pre_processing.cell_width",
+        "pre_processing.cell_height",
+        "pre_processing.num_classes",
+        "pre_processing.val_ratio",
+        "pre_processing.test_ratio",
     ]
 
-    check_config(config, required_keys)
+    check_config_keys(config, required_keys)
 
-    form_width = config["variables"].get("form_width")
-    form_height = config["variables"].get("form_height")
+    form_width = config["pre_processing"].get("form_width")
+    form_height = config["pre_processing"].get("form_height")
 
-    cell_width = config["variables"].get("cell_width")
-    cell_height = config["variables"].get("cell_height")
+    cell_width = config["pre_processing"].get("cell_width")
+    cell_height = config["pre_processing"].get("cell_height")
 
-    num_classes = config["variables"].get("num_classes")
+    num_classes = config["pre_processing"].get("num_classes")
 
-    val_ratio = config["variables"].get("val_ratio")
-    test_ratio = config["variables"].get("test_ratio")
+    val_ratio = config["pre_processing"].get("val_ratio")
+    test_ratio = config["pre_processing"].get("test_ratio")
 
     dataset_path = config["dataset"].get("splitted")
 
@@ -406,6 +406,6 @@ def preproessing(config):
 
 
 if __name__ == "__main__":
-    config_path = "config/data_preprocess.yaml"
+    config_path = "config/config.yaml"
     config = check_config_file(config_path)
     preproessing(config)

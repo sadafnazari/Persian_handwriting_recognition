@@ -175,7 +175,7 @@ def save_data(img, starting_points, ending_points, degree_points, path):
         y = starting_points['ID'][1]+5
         cell = img[y:y+h, math.floor(x+((i)*(w/8))):math.floor(x+((i+1)*(w/8)))]
         cv2.imwrite(path + "/" + "ID" + str(i) + ".jpg", cell)
-    
+
     # Student First Name extraction
     for i in range(8):
         w = ending_points['First Name'][0] - starting_points['First Name'][0]-10
@@ -184,7 +184,7 @@ def save_data(img, starting_points, ending_points, degree_points, path):
         y = starting_points['First Name'][1]+5
         cell = img[y:y+h, math.floor(x+((i)*(w/8))):math.floor(x+((i+1)*(w/8)))]
         cv2.imwrite(path + "/" + "FN" + str(7-i) + ".jpg", cell)
-    
+
     # Student Last Name extraction
     for i in range(8):
         w = ending_points['Last Name'][0] - starting_points['Last Name'][0]-10
@@ -213,7 +213,7 @@ def calculate_distance(p1, p2):
 
 
 def main():
-    addr = 'test.jpg'
+    addr = 'assets/Test.jpg'
     frame = cv2.imread(addr)
     corners = np.array(find_main_corners(frame), dtype=np.float32)
     form_image = apply_perspective(frame, corners)
@@ -224,6 +224,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-

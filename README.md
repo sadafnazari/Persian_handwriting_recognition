@@ -49,5 +49,7 @@ The trained model is stored in `models/trained_model.h5`. Then, the evaluation i
 Here are the summary of the training process:
 
 train loss: 0.1782 - train accuracy: 0.9395
+
 val loss: 0.2079 - val accuracy: 0.9240
+
 test loss: 0.2006 - test accuracy: 92.81%

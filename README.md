@@ -41,3 +41,7 @@ For running the preprocessing follow these steps:
 cd Persian_handwriting_recognition/
 python3 src/data_preprocessing.py
 ```
+
+# Model training
+The model training procedure is done with the `src/train_model.py` script. After the data preprocessing step, the dataset is ready be used for training. First step is to create data_generators for train, val, and test data and do a bit of data augmentation on the data. Then, the model is built and compiled. The training step is done afterwards where the model is trained in 50 epochs (can be modified in config file). 
+The trained model is stored in `models/trained_model.h5`. Then, the evaluation is done and the accuracy and loss on the test model is calculated. 

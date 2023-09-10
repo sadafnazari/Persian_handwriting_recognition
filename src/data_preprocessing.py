@@ -35,7 +35,7 @@ def aruco_extraction(img):
     # flatten the marker_corners array
     marker_corners = [mc[0] for mc in marker_corners]
 
-    # sorts the corners based on the ids [30: top left, 31:bottom left, 32:bottom right, 33:top left]
+    # sorts the corners based on the ids [30: top left, 31:bottom left, 32:top right, 33:bottom right]
     id_corner_combined = zip(marker_ids, marker_corners)
     sorted_combined = sorted(id_corner_combined, key=lambda x: x[0])
     sorted_corners = [x[1] for x in sorted_combined]

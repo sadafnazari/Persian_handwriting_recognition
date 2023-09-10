@@ -27,3 +27,7 @@ model:
   test_batch: 16
   epochs: 50
   verbos: 1
+
+test_form:
+  test_form_path: data/test_form/forms
+  extracted_path: data/test_form/extracted

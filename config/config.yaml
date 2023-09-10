@@ -25,5 +25,5 @@ model:
   train_batch: 128
   val_batch: 32
   test_batch: 16
-  epochs: 10
+  epochs: 2
   verbos: 1

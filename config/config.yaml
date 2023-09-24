@@ -28,6 +28,6 @@ model:
   epochs: 50
   verbos: 1
 
-test_form:
-  test_form_path: data/test_form/forms
-  extracted_path: data/test_form/extracted
+test_forms:
+  test_form_path: data/test_forms/forms
+  extracted_path: data/test_forms/extracted

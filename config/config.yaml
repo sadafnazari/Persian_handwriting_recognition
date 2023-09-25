@@ -1,0 +1,33 @@
+dataset:
+  raw: data/01_raw
+  splitted: data/02_splitted
+  labeled: data/03_labeled
+  final: data/04_final
+
+pre_processing:
+    form_width: 800
+    form_height: 1130
+    cell_width: 60
+    cell_height: 60
+    num_classes: 42
+    val_ratio: 0.20
+    test_ratio: 0.05
+
+data_generator:
+  rescale: 0.00392156862745098
+  shear_range: 0.1
+  zoom_range: 0.1
+  width_shift_range: 0.1
+  height_shift_range: 0.1
+
+model:
+  model_path: models/trained_model.h5
+  train_batch: 128
+  val_batch: 32
+  test_batch: 16
+  epochs: 50
+  verbos: 1
+
+test_forms:
+  test_form_path: data/test_forms/forms
+  extracted_path: data/test_forms/extracted

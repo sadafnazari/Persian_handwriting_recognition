@@ -1,4 +1,7 @@
 # Persian_handwriting_recognition
+This projects is inspired by the final projcet of the course <a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/">Foundations of Computer Vision Course</a>. It contains procedures for data collection, preprocessing, annotation, training, and prediction and uses computer vision and machine learning techniques. 
+
+# Requirements
 
 
 # Data collection

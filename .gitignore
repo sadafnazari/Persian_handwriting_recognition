@@ -81,6 +81,8 @@ target/
 /data/03_labeled
 /data/04_final
 
+/models/*.h5
+
 # Mac OS-specific storsage files
 .DS_Store
 

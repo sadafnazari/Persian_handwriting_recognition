@@ -4,15 +4,15 @@
 # Data collection
 The original dataset is taken from the one that is collected by students in the course, which can be found <a href='https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/assets/files/project/Persian-digits-and-letter-raw.zip'>in the official website of the course</a>. However, in this repository, some modifications are applied to the dataset and some images that were not collected according to the instructions were removed. We recommend to use this dataset can be found in `data/01_raw.zip`. It should be unzip and put data in `data/01_raw` directory.
 
-The dataset contains a set of images, taken from forms that can be found in `assets/Dataset_Form_A5.pdf`. Each form contains 4 Aruco markers and a number of cells which should be filled with persian handwritten numbers and letters. These forms have 2 types:
+The dataset contains a set of images, taken from forms that can be found in `assets/dataset_form_a5.pdf`. Each form contains 4 Aruco markers and a number of cells which should be filled with persian handwritten numbers and letters. These forms have 2 types:
 Type 'a': number '0', '1', the first part of the persian alphabet, '2', and '3'.
 Type 'b': number '4', '5', the second part of the persian alphabet, '6', '7, '8', and'9'. 
 
 In case of a need to collect a new dataset, or add more data to the current dataset, the following instructions must be followed:
 1. Form should be printed, prefrably in A5 size.
-2. The orientation of the arucos should be the same as a sample shown in `assets/Dataset_sample1.jpg`.
+2. The orientation of the arucos should be the same as a sample shown in `assets/dataset_sample1.jpg`.
 3. Each row is dedicated to either a number or a letter. 
-4. Each row should be filled with the determined order of the specific type of form. It should be either the same as `assets/Dataset_sample1.jpg` (type a) or `assets/Dataset_sample2.jpg` (type b).
+4. Each row should be filled with the determined order of the specific type of form. It should be either the same as `assets/dataset_sample1.jpg` (type a) or `assets/dataset_sample2.jpg` (type b).
 5. Image should be taken in format 'jpg'. While the orientation of the arucos should be fixed, the form it self can be in custome distance and orientation.
 6. The image should be stored in the `data/01_raw` directory with the correct subdirectory that corresponds to the type of form.
 7. (pre_labeling step): Each form will be separated manually in `data/02_splitted/a` or `data/02_splitted/b` based on their type. 
@@ -35,7 +35,7 @@ The last step would be to shuffle the dataset and create the train, val, and tes
 For running the preprocessing follow these steps:
 1. Put the splitted dataset into the proper directory (default is the data folder)
 2. Add the relative path of the splitted, labeled, and final into the config file, which is in `config/config.yaml`.
-3. If the config file is different than `config/config.py` pass its path in the `src/data_preprocess.py` script.
+3. If the config file is different than `config/config.py` pass its path in the `src/data_preprocessimg.py` script.
 4. Execute the script in the project directory:
 ```bash
 cd Persian_handwriting_recognition/
@@ -48,8 +48,15 @@ The trained model is stored in `models/trained_model.h5`. Then, the evaluation i
 
 Here are the summary of the training process:
 
-train loss: 0.1782 - train accuracy: 0.9395
+train loss: 0.3356 - train accuracy: 0.8877 
 
-val loss: 0.2079 - val accuracy: 0.9240
+val loss: 0.1868 - val accuracy: 0.9371
 
-test loss: 0.2006 - test accuracy: 92.81%
+test loss: 0.1630 - test accuracy: 0.9445
+
+# Inferance and prediction
+After the training procedure, the model is ready to be used for prediction. The `src/prediction.py` script does the prediction for images that are extracted from test forms. 
+
+A test form sample can be seen in `assets/test.jpg`. First the cells should be extracted from it (quite same procedure as `src/data_preprocessing.py`) with `src/extract_data_from_test_form.py`. The test forms should be put in `data/test_forms/forms` and the script will save the restuls in `data/test_forms/extracted` under a folder that represents the name of the form. 
+
+The objective would be to predict the student ID, first name, last name and the degree of the student based on the given form. 

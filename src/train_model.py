@@ -1,9 +1,8 @@
-import yaml
 from keras.callbacks import ModelCheckpoint
-from keras.layers import Conv2D, Dense, Flatten, Dropout
-from keras.layers.convolutional import MaxPooling2D
-from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
+
+from utils.config import check_config_file, check_config_keys
+from utils.model import build_model
 
 
 def train_process(config):
@@ -73,30 +72,6 @@ def train_process(config):
         model, train_data, val_data, train_batch, val_batch, model_path, epochs, verbos
     )
     evaluate_model(model, test_data)
-
-
-def build_model(num_classes, data_width, data_height):
-    """
-    builds the model
-    Args:
-        num_classes (int): number of classes
-        data_width (int): width of each image data
-        data_height (int): height of each image data
-
-    Returns:
-        'keras.engine.sequential.Sequential': build model
-    """
-    model = Sequential()
-    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(data_width, data_height, 3)))
-    model.add(Conv2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
-    model.add(Flatten())
-    model.add(Dense(256, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(num_classes, activation='softmax'))
-
-    return model
 
 
 def data_generator(
@@ -229,60 +204,6 @@ def evaluate_model(model, test_data):
     # Print the evaluation results
     print(f"Test loss: {loss:.4f}")
     print(f"Test accuracy: {accuracy * 100:.2f}%")
-
-
-def check_config_keys(cfg, required_keys):
-    """
-    Checks the config file and raise a value if there is a problem
-    Args:
-        cfg (omegaconf.dictconfig.DictConfig): A config file that is shared through 'hydra'
-        required_keys (list): A list of required keys to be checked
-
-    Raises:
-        ValueError: if a key is missing
-        ValueError: if a key is none
-    """
-    for key in required_keys:
-        value = cfg
-        for subkey in key.split("."):
-            if subkey not in value:
-                raise ValueError(f"Key '{key}' is missing in the configuration.")
-            value = value[subkey]
-
-        if value is None:
-            raise ValueError(f"Value for key '{key}' is None in the configuration.")
-
-
-def check_config_file(config_path):
-    """
-    checks if the config file exists and can be properly loaded
-    Args:
-        config_path (str): the path of the config file
-
-    Raises:
-        ValueError: if the config file is empty or invalid
-        FileNotFoundError: if the config file was not found
-        FileNotFoundError: if there was a problem in parsing data
-        ValueError: if there was a problem in loading data
-
-    Returns:
-        dict: a dictionary containing the config file
-    """
-    try:
-        with open(config_path, "r") as config_file:
-            config = yaml.safe_load(config_file)
-        if config is None:
-            raise ValueError("The YAML file is empty or invalid.")
-    except FileNotFoundError:
-        raise FileNotFoundError(f"The configuration file 'config.yaml' was not found.")
-    except yaml.YAMLError as e:
-        raise FileNotFoundError(f"Error parsing the YAML configuration file:")
-    except ValueError as e:
-        raise ValueError(f"Error loading the configuration data:")
-    else:
-        # Configuration loaded successfully, you can access settings here
-        print("Configuration loaded successfully.")
-    return config
 
 
 if __name__ == "__main__":

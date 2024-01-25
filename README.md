@@ -5,7 +5,7 @@ This projects is inspired by the final projcet of the course <a href="https://wp
 
 
 # Data collection
-The original dataset is taken from the one that is collected by students in the course, which can be found <a href='https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/assets/files/project/Persian-digits-and-letter-raw.zip'>in the official website of the course</a>. However, in this repository, some modifications are applied to the dataset and some images that were not collected according to the instructions were removed. We recommend to use this dataset can be found in `data/01_raw.zip`. It should be unzip and put data in `data/01_raw` directory.
+The original dataset is taken from the one that is collected by students in the course, which can be found <a href='https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/assets/files/project/Persian-digits-and-letter-raw.zip'>in the official website of the course</a>. However, in this repository, some modifications are applied to the dataset and some images that were not collected according to the instructions were removed. We recommend to use this dataset can be found in <a href="https://drive.google.com/drive/folders/1KNxHDEWs5FIO0Fo36qUnTNcyyXcUswsD?usp=sharing">this link</a> as `data/01_raw.zip`. It should be unzip and put data in `data/01_raw` directory.
 
 The dataset contains a set of images, taken from forms that can be found in `assets/dataset_form_a5.pdf`. Each form contains 4 Aruco markers and a number of cells which should be filled with persian handwritten numbers and letters. These forms have 2 types:
 Type 'a': number '0', '1', the first part of the persian alphabet, '2', and '3'.
@@ -23,9 +23,9 @@ In case of a need to collect a new dataset, or add more data to the current data
 # Data preprocessing
 The objective of the data preprocessing is to first, extract each cell from each form, and store each cell in a folder that represents the class of that cell (0 to 9 for the numbers and 10 to 42 for the letters). This is the labeling process. Also, shuffling the labeled dataset and split it to train, val, and test set is done afterwards.
 
-Since in the original dataset, the images are stored numrically altogether, it is not easy to store the extracted cells into the correct subfolder that would represent the label/class of that cell with only computer vision tools. Therefore, the manual separation of the forms based on their type (a or b) is needed. The separated dataset can be found `data/02_splitted.zip`. It should be unzip and data should be stored in `/data/02_splitted` directory.
+Since in the original dataset, the images are stored numrically altogether, it is not easy to store the extracted cells into the correct subfolder that would represent the label/class of that cell with only computer vision tools. Therefore, the manual separation of the forms based on their type (a or b) is needed. The separated dataset can be found in <a href="https://drive.google.com/drive/folders/1KNxHDEWs5FIO0Fo36qUnTNcyyXcUswsD?usp=sharing">this link</a> as `data/02_splitted.zip`. It should be unzip and data should be stored in `/data/02_splitted` directory.
 
-The labeling process can be done by the `src/data_preprocessing.py` script which operate as follows (The labeled data can be found in `data/03_labeled.zip` in case one would like to skip executing the `src/data_preprocessing.py` script.):
+The labeling process can be done by the `src/data_preprocessing.py` script which operate as follows (The labeled data can be found in <a href="https://drive.google.com/drive/folders/1KNxHDEWs5FIO0Fo36qUnTNcyyXcUswsD?usp=sharing">this link</a> as `data/03_labeled.zip` in case one would like to skip executing the `src/data_preprocessing.py` script.):
 1. Makes the neccessary directories in the `data/03_labeled` directory. These directories will later represent the class of each data.
 2. Reads image
 3. Detects the Aruco markers, and drops the ones that their markers cannot be detected
@@ -33,7 +33,7 @@ The labeling process can be done by the `src/data_preprocessing.py` script which
 5. Resize the images to a determined size in order to have the same size for all the images
 6. Extracts each cell, resizes them to a determined size, and store them to their correspondent folder in the `data/03_labeled` directory(labeling process)
 
-The last step would be to shuffle the dataset and create the train, val, and test set based on the ratio. The output can be found in `data/04_final.zip`.
+The last step would be to shuffle the dataset and create the train, val, and test set based on the ratio. The output can be found in <a href="https://drive.google.com/drive/folders/1KNxHDEWs5FIO0Fo36qUnTNcyyXcUswsD?usp=sharing">this link</a> as `data/04_final.zip`.
 
 For running the preprocessing follow these steps:
 1. Put the splitted dataset into the proper directory (default is the data folder)
@@ -47,7 +47,7 @@ python3 src/data_preprocessing.py
 
 # Model training
 The model training procedure is done with the `src/train_model.py` script. After the data preprocessing step, the dataset is ready be used for training. First step is to create data_generators for train, val, and test data and do a bit of data augmentation on the data. Then, the model is built and compiled. The training step is done afterwards where the model is trained in 50 epochs (can be modified in config file). 
-The trained model is stored in `models/trained_model.h5`. Then, the evaluation is done and the accuracy and loss on the test model is calculated. If one wants to skip the training, the model can be found in `models/train_model.zip`.
+The trained model is stored in `models/trained_model.h5`. Then, the evaluation is done and the accuracy and loss on the test model is calculated. If one wants to skip the training, the model can be found in <a href="https://drive.google.com/drive/folders/1KNxHDEWs5FIO0Fo36qUnTNcyyXcUswsD?usp=sharing">this link</a> as `models/train_model.zip`.
 
 Here are the summary of the training process:
 
@@ -63,3 +63,7 @@ After the training procedure, the model is ready to be used for prediction. The 
 A test form sample can be seen in `assets/test.jpg`. First the cells should be extracted from it (quite same procedure as `src/data_preprocessing.py`) with `src/extract_data_from_test_form.py`. The test forms should be put in `data/test_forms/forms` and the script will save the restuls in `data/test_forms/extracted` under a folder that represents the name of the form. 
 
 The objective would be to predict the student ID, first name, last name and the degree of the student based on the given form. 
+
+# TODO
+1. Refactoring the code
+2. Improving the accuracy

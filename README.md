@@ -63,3 +63,7 @@ After the training procedure, the model is ready to be used for prediction. The 
 A test form sample can be seen in `assets/test.jpg`. First the cells should be extracted from it (quite same procedure as `src/data_preprocessing.py`) with `src/extract_data_from_test_form.py`. The test forms should be put in `data/test_forms/forms` and the script will save the restuls in `data/test_forms/extracted` under a folder that represents the name of the form. 
 
 The objective would be to predict the student ID, first name, last name and the degree of the student based on the given form. 
+
+# TODO
+1. Refactoring the code
+2. Improving the accuracy

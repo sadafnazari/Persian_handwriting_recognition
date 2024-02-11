@@ -76,10 +76,10 @@ target/
 .ipynb_checkpoints/
 
 # exclude data from source control by default
-/data/01_raw
-/data/02_splitted
-/data/03_labeled
-/data/04_final
+/data/01_raw/*.jpg
+/data/02_splitted/*.jpg
+/data/03_labeled/*.jpg
+/data/04_final/*.jpg
 
 /models/*.h5
 

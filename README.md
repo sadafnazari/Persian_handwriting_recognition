@@ -89,6 +89,6 @@ A test form sample can be seen in `assets/test.jpg`. First the cells should be e
 
 The objective would be to predict the student ID, first name, last name and the degree of the student based on the given form.
 
-# TODO
+## TODO
 1. Refactoring the code
 2. Improving the accuracy

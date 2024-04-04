@@ -1,6 +1,6 @@
-from keras.layers import Conv2D, Dense, Flatten, Dropout
-from keras.layers.convolutional import MaxPooling2D
-from keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, Dense, Flatten, Dropout
+from tensorflow.keras.layers import MaxPooling2D
+from tensorflow.keras.models import Sequential
 
 def build_model(num_classes, data_width, data_height):
     """

@@ -1,5 +1,5 @@
-from keras.callbacks import ModelCheckpoint
-from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 from utils.config import check_config_file, check_config_keys
 from utils.model import build_model

@@ -1,10 +1,32 @@
 # Persian_handwriting_recognition
 This projects is inspired by the final projcet of the course <a href="https://wp.kntu.ac.ir/nasihatkon/teaching/cvug/s2020/">Foundations of Computer Vision Course</a>. It contains procedures for data collection, preprocessing, annotation, training, and prediction and uses computer vision and machine learning techniques.
 
+## Introduction
+
+The goal of this project is to first, extract student's id, first name and last name from a handwritten form, and then classify each letter and number with a neural network model that has been trained based on a collected dataset from Persian handwritten letters and numbers. The dataset is collected by students in the course, and it has been preprocessed and annotated.
+
+The form should be similar to Figure 1. As illustrated, the form in the picture can be in any orientation.
+
+
+<figure style="text-align:center">
+    <img src="assets/test.jpg"
+         alt="Sample test form"
+         width="300" height="400">
+    <figcaption>Figure 1 - A sample of the test form.</figcaption>
+</figure>
+
+The output should be similar to the text below:
+
+Form: test_sample.jpg <br>
+Student ID: 01234567 <br>
+First name: صدف<br>
+Last name: نظری<br>
+
 ## Setup
 
 <ol>
-<li>Having `conda` installed and ready to be used.</li>
+<li>Having `Ubuntu 20.04` or higher (recommended) </li>
+<li>Having `conda` installed and ready to be used</li>
 <li>Setting up an environment:
 
 ```bash

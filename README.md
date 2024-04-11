@@ -7,11 +7,10 @@ The goal of this project is to first, extract student's id, first name and last 
 
 The form should be similar to Figure 1. As illustrated, the form in the picture can be in any orientation.
 
-
 <figure style="text-align:center">
     <img src="assets/test.jpg"
          alt="Sample test form"
-         width="300" height="400">
+         width="600" height="700">
     <figcaption>Figure 1 - A sample of the test form.</figcaption>
 </figure>
 

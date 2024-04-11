@@ -43,10 +43,10 @@ def aruco_extraction(img):
     #                                   bottom left point of the bottom left marker)
     boundaries = np.array(
         [
-            marker_corners[2][3],
-            marker_corners[1][2],
-            marker_corners[0][1],
-            marker_corners[3][0],
+            marker_corners[int(np.where(marker_ids == 34)[0])][3],
+            marker_corners[int(np.where(marker_ids == 35)[0])][2],
+            marker_corners[int(np.where(marker_ids == 36)[0])][1],
+            marker_corners[int(np.where(marker_ids == 33)[0])][0],
         ],
         dtype=np.float32,
     )

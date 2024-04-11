@@ -97,11 +97,11 @@ The trained model is stored in `models/trained_model.h5`. Then, the evaluation i
 
 Here are the summary of the training process:
 
-train loss: 0.3356 - train accuracy: 0.8877
+train loss: 0.3371 - train accuracy: 0.8840
 
-val loss: 0.1868 - val accuracy: 0.9371
+val loss: 0.1626 - val accuracy: 0.9471
 
-test loss: 0.1630 - test accuracy: 0.9445
+test loss: 0.1372 - test accuracy: 0.9533
 
 ## Inferance and prediction
 After the training procedure, the model is ready to be used for inference and prediction. The `src/prediction.py` script does the prediction for images that are extracted from test forms.

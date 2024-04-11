@@ -36,10 +36,7 @@ def aruco_extraction(img):
     # flatten the marker_corners array
     marker_corners = [mc[0] for mc in marker_corners]
 
-    # sorts the corners based on the ids [30: top left, 31:bottom left, 32:top right, 33:bottom right]
-    id_corner_combined = zip(marker_ids, marker_corners)
-    sorted_combined = sorted(id_corner_combined, key=lambda x: x[0])
-    sorted_corners = [x[1] for x in sorted_combined]
+    # corners based on the ids [30: top left, 31:top right, 33:bottom right, 32:bottom left]
 
     # selects the boundaries clock wise(top left point of the top left marker,
     #                                   top right point of the top right marker,
@@ -47,10 +44,10 @@ def aruco_extraction(img):
     #                                   bottom left point of the bottom left marker)
     boundaries = np.array(
         [
-            sorted_corners[0][0],
-            sorted_corners[1][1],
-            sorted_corners[3][2],
-            sorted_corners[2][3],
+            marker_corners[int(np.where(marker_ids == 30)[0])][0],
+            marker_corners[int(np.where(marker_ids == 31)[0])][1],
+            marker_corners[int(np.where(marker_ids == 33)[0])][2],
+            marker_corners[int(np.where(marker_ids == 32)[0])][3],
         ],
         dtype=np.float32,
     )

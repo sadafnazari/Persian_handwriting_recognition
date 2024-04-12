@@ -102,13 +102,13 @@ def cell_extraction(
     else:
         print(f"Folder '{directory}' already exists.")
     # Locations are guessed TODO: Find a proper way to apply this
-    starting_points = {"ID": (40, 305), "First Name": (40, 435), "Last Name": (40, 570)}
+    starting_points = {"ID": (45, 315), "First Name": (45, 445), "Last Name": (45, 580)}
     ending_points = {
-        "ID": (580, 385),
-        "First Name": (580, 515),
-        "Last Name": (580, 650),
+        "ID": (557, 395),
+        "First Name": (575, 525),
+        "Last Name": (575, 670),
     }
-    degree_points = {"PHD": (75, 720), "MS": (225, 720), "BS": (450, 720)}
+    degree_points = {"PHD": (70, 745), "MS": (220, 745), "BS": (440, 745)}
 
     number_of_cells = 8
 
@@ -118,7 +118,7 @@ def cell_extraction(
         y1 = starting_points["ID"][1]
         x2 = x1 + width
         y2 = ending_points["ID"][1]
-        cell = img[y1:y2, x1:x2]
+        cell = img[y1+5:y2-5, x1+5:x2-5]
         cell = cv2.resize(cell, (cell_width, cell_height))
         cv2.imwrite(directory + "/" + "ID" + "_" + str(i) + ".jpg", cell)
 

@@ -18,13 +18,14 @@ The output should be similar to the text below:
 
 Form: test_sample.jpg <br>
 Student ID: 01234567 <br>
-First name: صدف<br>
-Last name: نظری<br>
+First name: ص د ف<br>
+Last name: ن ظ ر ی<br>
 
 ## Setup
 
 <ol>
 <li>Having `Ubuntu 20.04` or higher (recommended) </li>
+<li>Having Minimum 10 GB RAM for training </li>
 <li>Having `conda` installed and ready to be used</li>
 <li>Setting up an environment:
 
@@ -92,16 +93,28 @@ For running the preprocessing follow these steps:
     ```
 
 ## Model training
-After the data preprocessing and labelling, the dataset is ready be used for training. The training procedure is done with the `src/train_model.py` script.  First step is to create data_generators for train, val, and test data and do a bit of data augmentation on the data. Then, the model is built and compiled.
-The trained model is stored in `models/trained_model.h5`. Then, the evaluation is done and the accuracy and loss on the test model is calculated. If one wants to skip the training, the model can be found in <a href="https://drive.google.com/drive/folders/1lZi71TKveuhSgGXpxAAWeNFkZHkU9SKB?usp=sharing">this link</a> as `models/train_model.zip`.
+After the data preprocessing and labelling, the dataset is ready be used for training. The training procedure is done with the `src/train_models.py` script. With this script, two models will be trained: One for numbers and the other for letters.
+
+First step for is to create data_generators for train, val, and test data and do a bit of data augmentation on the data for numbers and letters separately. Then, the model is built and compiled.
+The trained models are stored in `models/trained_model_numbers.h5` and `models/trained_model_letters.h5`. Then, the evaluation is done and the accuracy and loss on the test model is calculated. If one wants to skip the training, the model can be found in <a href="https://drive.google.com/drive/folders/1lZi71TKveuhSgGXpxAAWeNFkZHkU9SKB?usp=sharing">this link</a> as `models/train_model.zip`.
 
 Here are the summary of the training process:
 
-train loss: 0.3371 - train accuracy: 0.8840
+For numbers:
 
-val loss: 0.1626 - val accuracy: 0.9471
+train loss: 0.0493 - train accuracy: 0.9824
 
-test loss: 0.1372 - test accuracy: 0.9533
+val loss: 0.0516 - val accuracy: 0.9871
+
+test loss: 0.0320 - test accuracy: 0.9894
+
+For letters:
+
+train loss: 0.2716 - train accuracy: 0.9025
+
+val loss: 0.1903 - val accuracy: 0.9316
+
+test loss: 0.2276 - test accuracy: 0.9177
 
 ## Inferance and prediction
 After the training procedure, the model is ready to be used for inference and prediction. The `src/prediction.py` script does the prediction for images that are extracted from test forms.

@@ -87,11 +87,10 @@ For running the preprocessing follow these steps:
   2. Add the relative path of the splitted, labeled, and final into the config file, which is in `config/config.yaml`.
   3. If the config file is different than `config/config.yaml` pass its path in the `src/data_preprocessimg.py` script.
   4. Execute the script in the project directory:
-    ```bash
-    cd Persian_handwriting_recognition/
-    python3 src/data_preprocessing.py
-    ```
-
+     ``` bash
+      cd Persian_handwriting_recognition/
+      python3 src/data_preprocessing.py
+    
 ## Model training
 After the data preprocessing and labelling, the dataset is ready be used for training. The training procedure is done with the `src/train_models.py` script. With this script, two models will be trained: One for numbers and the other for letters.
 

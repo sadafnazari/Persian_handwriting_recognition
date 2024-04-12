@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 
 from utils.config import check_config_file, check_config_keys
+from utils.preprocessing import preprocess
 
 
 def aruco_extraction(img):
@@ -88,6 +89,7 @@ def cell_extraction(
     form_height,
     cell_width,
     cell_height,
+    gaussian_kernel
 ):
     """
     Extracts cells and the saves them based on the type of the given form
@@ -101,6 +103,7 @@ def cell_extraction(
         form_height (int): height of the form
         cell_width (int): width of each cell
         cell_height (int): height of each cell
+        gaussian_kernel (int): the gaussian kernel
     """
     # Calculate cell dimensions based on the number of lines
     num_horizontal_lines = 21
@@ -131,9 +134,10 @@ def cell_extraction(
             y1 = row * cell_height
             x2 = x1 + cell_width
             y2 = y1 + cell_height
-            cell = img[y1:y2, x1:x2]
+            cell = img[y1 + 7 :y2 - 7, x1 + 7 :x2 - 7]
             cell = cv2.resize(cell, (cell_width, cell_height))
-
+            # applies preproccesing
+            cell = preprocess(cell, gaussian_kernel)
             # drops the cells that contain markers
             if row < 2 and col < 2:
                 continue
@@ -186,6 +190,7 @@ def label_dataset(
     form_height,
     cell_width,
     cell_height,
+    gaussian_kernel
 ):
     """labels dataset by extracting form and each cell and saving them to a folder that represents the class of each cell
 
@@ -197,6 +202,7 @@ def label_dataset(
         form_height (int): height of the form
         cell_width (int): width of each cell
         cell_height (int): height of each cell
+        gaussian_kernel (int): gaussian kernel
     """
 
     for image_path in glob.glob(dataset_path + "/" + type + "/*.*"):
@@ -217,6 +223,7 @@ def label_dataset(
             form_height,
             cell_width,
             cell_height,
+            gaussian_kernel
         )
 
 
@@ -308,6 +315,8 @@ def preproessing(config):
 
     num_classes = config["pre_processing"].get("num_classes")
 
+    gaussian_kernel = config["pre_processing"].get("gaussian_kernel")
+
     val_ratio = config["pre_processing"].get("val_ratio")
     test_ratio = config["pre_processing"].get("test_ratio")
 
@@ -327,6 +336,7 @@ def preproessing(config):
         form_height,
         cell_width,
         cell_height,
+        gaussian_kernel
     )
 
     # Extracting the forms of the type 'b'
@@ -338,6 +348,7 @@ def preproessing(config):
         form_height,
         cell_width,
         cell_height,
+        gaussian_kernel
     )
 
     print("dataset is extracted and labeled successfully.")

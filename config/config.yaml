@@ -5,13 +5,16 @@ dataset:
   final: data/04_final
 
 pre_processing:
-    form_width: 800
-    form_height: 1130
-    cell_width: 60
-    cell_height: 60
+    form_width: 784
+    form_height: 1176
+    cell_width: 28
+    cell_height: 28
     num_classes: 42
+    num_classes_numbers: 10
+    num_classes_letters: 32
     val_ratio: 0.20
     test_ratio: 0.05
+    gaussian_kernel: 1
 
 data_generator:
   rescale: 0.00392156862745098
@@ -21,12 +24,16 @@ data_generator:
   height_shift_range: 0.1
 
 model:
-  model_path: models/trained_model.h5
+  model_numbers_path: models/trained_model_numbers.h5
+  model_letters_path: models/trained_model_letters.h5
   train_batch: 128
   val_batch: 32
   test_batch: 16
   epochs: 50
   verbos: 1
+
+inference:
+  threshold: 0.65
 
 test_forms:
   test_form_path: data/test_forms/forms

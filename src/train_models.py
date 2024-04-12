@@ -15,13 +15,15 @@ def train_process(config):
         "dataset.final",
         "pre_processing.cell_width",
         "pre_processing.cell_height",
-        "pre_processing.num_classes",
+        "pre_processing.num_classes_numbers",
+        "pre_processing.num_classes_letters",
         "data_generator.rescale",
         "data_generator.shear_range",
         "data_generator.zoom_range",
         "data_generator.width_shift_range",
         "data_generator.height_shift_range",
-        "model.model_path",
+        "model.model_numbers_path",
+        "model.model_letters_path",
         "model.train_batch",
         "model.val_batch",
         "model.test_batch",
@@ -36,7 +38,8 @@ def train_process(config):
     cell_width = config["pre_processing"].get("cell_width")
     cell_height = config["pre_processing"].get("cell_height")
 
-    num_classes = config["pre_processing"].get("num_classes")
+    num_classes_numbers = config["pre_processing"].get("num_classes_numbers")
+    num_classes_letters = config["pre_processing"].get("num_classes_letters")
 
     rescale = config["data_generator"].get("rescale")
     shear_range = config["data_generator"].get("shear_range")
@@ -44,14 +47,15 @@ def train_process(config):
     width_shift_range = config["data_generator"].get("width_shift_range")
     height_shift_range = config["data_generator"].get("height_shift_range")
 
-    model_path = config["model"].get("model_path")
+    model_numbers_path = config["model"].get("model_numbers_path")
+    model_letters_path = config["model"].get("model_letters_path")
     train_batch = config["model"].get("train_batch")
     val_batch = config["model"].get("val_batch")
     test_batch = config["model"].get("test_batch")
     epochs = config["model"].get("epochs")
     verbos = config["model"].get("verbos")
 
-    train_data, val_data, test_data = data_generator(
+    train_data_numbers, val_data_numbers, test_data_numbers = data_generator(
         dataset_path + "/train/",
         dataset_path + "/val/",
         dataset_path + "/test/",
@@ -65,13 +69,36 @@ def train_process(config):
         zoom_range,
         width_shift_range,
         height_shift_range,
-        num_classes,
+        "numbers"
     )
-    model = build_model(num_classes, cell_width, cell_height)
+
+    train_data_letters, val_data_letters, test_data_letters = data_generator(
+        dataset_path + "/train/",
+        dataset_path + "/val/",
+        dataset_path + "/test/",
+        train_batch,
+        val_batch,
+        test_batch,
+        cell_width,
+        cell_height,
+        rescale,
+        shear_range,
+        zoom_range,
+        width_shift_range,
+        height_shift_range,
+        "letters"
+    )
+    model_numbers = build_model(num_classes_numbers, cell_width, cell_height)
     train_model(
-        model, train_data, val_data, train_batch, val_batch, model_path, epochs, verbos
+        model_numbers, train_data_numbers, val_data_numbers, train_batch, val_batch, model_numbers_path, epochs, verbos
     )
-    evaluate_model(model, test_data)
+    evaluate_model(model_numbers, test_data_numbers)
+
+    model_letters = build_model(num_classes_letters, cell_width, cell_height)
+    train_model(
+        model_letters, train_data_letters, val_data_letters, train_batch, val_batch, model_letters_path, epochs, verbos
+    )
+    evaluate_model(model_letters, test_data_letters)
 
 
 def data_generator(
@@ -88,7 +115,7 @@ def data_generator(
     zoom_range,
     width_shift_range,
     height_shift_range,
-    num_classes,
+    type
 ):
     """
     creates data generators for the train, val, and test dataset
@@ -106,7 +133,7 @@ def data_generator(
         zoom_range (float): zoom range parameter
         width_shift_range (float): width shift range parameter
         height_shift_range (float): height shift range parameter
-        num_classes (int): number of classes
+        type (str): determines the generator for numbers or letters
 
     Returns:
         'keras.preprocessing.image.DirectoryIterator': train data generator
@@ -123,8 +150,12 @@ def data_generator(
     )
     # Create an empty dictionary to store class indices, this is because the mapping of classes should be in the correct order
     class_indices = {}
-    for i in range(num_classes):
-        class_indices[str(i)] = i
+    if type == "numbers":
+        for i in range(10):
+            class_indices[str(i)] = i
+    elif type == "letters":
+        for i in range(10,42):
+            class_indices[str(i)] = i
 
     train_generator = datagen.flow_from_directory(
         train_path,
@@ -133,6 +164,7 @@ def data_generator(
         shuffle=True,
         class_mode="categorical",
         classes=class_indices,
+        color_mode='grayscale'
     )
 
     val_generator = datagen.flow_from_directory(
@@ -142,6 +174,7 @@ def data_generator(
         shuffle=False,
         class_mode="categorical",
         classes=class_indices,
+        color_mode='grayscale'
     )
 
     test_generator = datagen.flow_from_directory(
@@ -151,6 +184,7 @@ def data_generator(
         shuffle=False,
         class_mode="categorical",
         classes=class_indices,
+        color_mode='grayscale'
     )
 
     return train_generator, val_generator, test_generator
